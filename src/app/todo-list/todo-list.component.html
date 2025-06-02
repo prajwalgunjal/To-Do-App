@@ -1,0 +1,111 @@
+<!-- todo-list/todo-list.component.html -->
+<!-- Stats -->
+<section class="stats-section" *ngIf="todos.length > 0">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-number">{{ todos.length }}</span>
+      <span class="stat-label">Total</span>
+    </div>
+    <div class="stat-card pending">
+      <span class="stat-number">{{ pendingCount }}</span>
+      <span class="stat-label">Pending</span>
+    </div>
+    <div class="stat-card completed">
+      <span class="stat-number">{{ completedCount }}</span>
+      <span class="stat-label">Completed</span>
+    </div>
+  </div>
+</section>
+
+<!-- Todo List -->
+<section class="todo-list-section">
+  <div class="todo-list" *ngIf="todos.length > 0; else emptyState">
+    <div 
+      class="todo-item" 
+      *ngFor="let todo of todos; trackBy: trackByTodoId"
+      [class.completed]="todo.completed"
+      [class.editing]="todo.isEditing"
+    >
+      <!-- View Mode -->
+      <div class="todo-content" *ngIf="!todo.isEditing">
+        <div class="todo-check-container">
+          <button 
+            class="todo-checkbox"
+            (click)="toggleComplete(todo)"
+            [class.checked]="todo.completed"
+            [attr.aria-label]="todo.completed ? 'Mark as incomplete' : 'Mark as complete'"
+          >
+            <span class="checkmark" *ngIf="todo.completed">✓</span>
+          </button>
+        </div>
+        
+        <div class="todo-text-container">
+          <span class="todo-text" [class.completed-text]="todo.completed">
+            {{ todo.text }}
+          </span>
+          <span class="todo-date">
+            {{ todo.createdAt | date:'short' }}
+          </span>
+        </div>
+
+        <div class="todo-actions">
+          <button 
+            class="action-button edit-button"
+            (click)="startEdit(todo)"
+            [attr.aria-label]="'Edit task: ' + todo.text"
+            *ngIf="!todo.completed"
+          >
+            ✏️
+          </button>
+          <button 
+            class="action-button delete-button"
+            (click)="deleteTodo(todo)"
+            [attr.aria-label]="'Delete task: ' + todo.text"
+          >
+            🗑️
+          </button>
+        </div>
+      </div>
+
+      <!-- Edit Mode -->
+      <form 
+        [formGroup]="editForm" 
+        (ngSubmit)="saveEdit(todo)"
+        class="edit-form"
+        *ngIf="todo.isEditing"
+      >
+        <input 
+          type="text" 
+          formControlName="editText"
+          class="edit-input"
+          [class.error]="editForm.get('editText')?.invalid"
+        />
+        <div class="edit-actions">
+          <button 
+            type="submit" 
+            class="save-button"
+            [disabled]="editForm.invalid"
+          >
+            ✓
+          </button>
+          <button 
+            type="button" 
+            class="cancel-button"
+            (click)="cancelEdit(todo)"
+          >
+            ✕
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <ng-template #emptyState>
+    <div class="empty-state">
+      <div class="empty-icon">📝</div>
+      <h3 class="empty-title">No tasks yet</h3>
+      <p class="empty-description">Add your first task above to get started!</p>
+    </div>
+  </ng-template>
+</section>

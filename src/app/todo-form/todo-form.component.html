@@ -1,0 +1,25 @@
+<!-- todo-form/todo-form.component.html -->
+<section class="add-todo-section">
+  <form [formGroup]="todoForm" (ngSubmit)="onSubmit()" class="todo-form">
+    <div class="input-group">
+      <input 
+        type="text" 
+        formControlName="todoText"
+        placeholder="What needs to be done?"
+        class="todo-input"
+        [class.error]="todoForm.get('todoText')?.invalid && todoForm.get('todoText')?.touched"
+      />
+      <button 
+        type="submit" 
+        class="add-button"
+        [disabled]="todoForm.invalid"
+      >
+        <span class="add-icon">+</span>
+        Add
+      </button>
+    </div>
+    <div class="form-error" *ngIf="todoForm.get('todoText')?.invalid && todoForm.get('todoText')?.touched">
+      Please enter a valid task
+    </div>
+  </form>
+</section>

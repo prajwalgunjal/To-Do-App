@@ -1,0 +1,17 @@
+<!-- header/header.component.html -->
+<header class="app-header">
+  <div class="header-content">
+    <h1 class="app-title">
+      <span class="title-icon">✨</span>
+      Todo App
+    </h1>
+    <button 
+      class="theme-toggle" 
+      (click)="onThemeToggle()" 
+      [attr.aria-label]="isDarkTheme ? 'Switch to light theme' : 'Switch to dark theme'"
+    >
+      <span *ngIf="isDarkTheme">☀️</span>
+      <span *ngIf="!isDarkTheme">🌙</span>
+    </button>
+  </div>
+</header>
